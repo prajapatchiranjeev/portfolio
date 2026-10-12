@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chiranjeev Prajapat | UI/UX Designer, Web Designer, Frontend Developer</title>
+  <meta name="description" content="Portfolio of Chiranjeev Prajapat: web design, frontend development, e-commerce, Shopify and WordPress work, and mobile app contributions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <div class="wrap nav__inner">
+      <a class="wordmark" href="#home" aria-label="Chiranjeev Prajapat, home">Chiranjeev Prajapat<span>.</span></a>
+      <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu"><span></span></button>
+      <nav class="nav__links" id="navLinks" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+        <a class="btn btn--small btn--primary" data-resume href="assets/resume/Chiranjeev-Prajapat-Resume.pdf" download>Resume <span class="arrow" aria-hidden="true">↓</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="wrap hero__grid">
+        <div>
+          <span class="eyebrow">UI/UX Designer · Web Designer · Frontend Developer</span>
+          <h1 aria-label="Designing Digital Experiences. Building Them for Real.">
+            <span class="line"><span>Designing Digital <em>Experiences.</em></span></span>
+            <span class="line"><span>Building Them for Real.</span></span>
+          </h1>
+          <p class="hero__lead">I'm Chiranjeev Prajapat, a design and development professional working across web experiences, e-commerce platforms, responsive interfaces, and mobile applications.</p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#work">View My Work <span class="arrow" aria-hidden="true">↓</span></a>
+            <a class="btn" href="#contact">Contact Me</a>
+            <a class="btn" data-resume href="assets/resume/Chiranjeev-Prajapat-Resume.pdf" download>Download Resume <span class="arrow" aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero__links">
+            <a data-github href="https://github.com/prajapatchiranjeev" target="_blank" rel="noopener">GitHub ↗</a>
+          </div>
+        </div>
+        <div class="mark" aria-hidden="true">
+          <div class="mark__grid"></div>
+          <div class="mark__dot"></div>
+          <div class="mark__tag">Portfolio</div>
+          <div class="mark__letters">CP</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-label="Areas of work">
+      <div class="wrap">
+        <ul>
+          <li>Web design</li><li>Frontend development</li><li>E-commerce</li><li>Shopify &amp; WordPress</li><li>Responsive interfaces</li><li>Mobile apps</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WORK -->
+    <section class="block" id="work">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Selected work</span>
+            <h2>Projects</h2>
+          </div>
+          <p>Live websites and apps I have contributed to. Each case study describes my part in the project.</p>
+        </div>
+        <div class="filters" id="filters" role="group" aria-label="Filter projects by category"></div>
+        <div class="grid" id="grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="block about" id="about">
+      <div class="wrap about__grid">
+        <div class="reveal">
+          <span class="eyebrow">About</span>
+          <h2>Between design and development.</h2>
+          <p>I'm Chiranjeev Prajapat. My work sits at the intersection of design and development. I have contributed to websites and digital products across e-commerce, hosting, fintech and solar, from interface improvements and responsive implementation to site customization and maintenance.</p>
+          <p>Working on both sides means I can think about how something should look and how it will actually be built, and help the two stay in step.</p>
+        </div>
+        <ul class="do reveal" aria-label="What I work on">
+          <li><span>01</span>Website design and UI improvements</li>
+          <li><span>02</span>Frontend development</li>
+          <li><span>03</span>E-commerce website work</li>
+          <li><span>04</span>Shopify and WordPress tasks</li>
+          <li><span>05</span>Responsive implementation</li>
+          <li><span>06</span>Maintenance and customization</li>
+          <li><span>07</span>Mobile app contributions</li>
+          <li><span>08</span>Design and development collaboration</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="block" id="skills">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Skills</span>
+            <h2>What I work with</h2>
+          </div>
+          <p>Edit this list in <code>js/projects-data.js</code>.</p>
+        </div>
+        <div class="skills reveal" id="skillsGrid"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="block contact" id="contact">
+      <div class="wrap">
+        <span class="eyebrow">Contact</span>
+        <h2>Let's build <em>something.</em></h2>
+        <div class="contact__row" id="contactRow"></div>
+        <p class="contact__note" id="contactNote"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>© <span id="year"></span> Chiranjeev Prajapat</span>
+      <p>Project names, logos and screenshots belong to their respective owners and are shown to describe work I contributed to.</p>
+    </div>
+  </footer>
+
+  <script src="js/projects-data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
