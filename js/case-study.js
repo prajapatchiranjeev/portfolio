@@ -1,14 +1,8 @@
 (function () {
   "use strict";
-  var S = window.SITE, P = window.PROJECTS, LBL = window.CATEGORY_LABELS;
+  var S = window.SITE, P = window.PROJECTS, LBL = window.CATEGORY_LABELS, UI = window.UI;
+  var esc = UI.esc, pad = UI.pad;
   var root = document.getElementById("case");
-
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
-  }
-  function pad(n) { return n < 10 ? "0" + n : "" + n; }
 
   /* shared hooks: nav, resume, year */
   document.querySelectorAll("[data-resume]").forEach(function (a) { a.setAttribute("href", S.resumePath); });
@@ -37,93 +31,28 @@
   document.title = p.name + " | Case study | Chiranjeev Prajapat";
 
   /* helpers */
-  function todo(label, field, hint) {
+  function todo(field, hint) {
     if (!S.showPlaceholders) return null;
     return '<div class="todo"><b>To be added</b>' + esc(hint) + ' Edit <code>' + esc(field) + '</code> for <code>' + esc(p.slug) + '</code> in <code>js/projects-data.js</code>.</div>';
   }
   var secCount = 0;
-  function section(num, title, bodyHtml) {
+  function section(title, bodyHtml) {
     if (!bodyHtml) return "";
-    num = pad(++secCount);
-    return '<section class="case-sec"><h2><small>' + num + '</small>' + esc(title) + '</h2><div>' + bodyHtml + '</div></section>';
+    return '<section class="case-sec"><h2><small>' + pad(++secCount) + '</small>' + esc(title) + '</h2><div>' + bodyHtml + '</div></section>';
   }
   function list(items) { return '<div class="prose"><ul>' + items.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul></div>"; }
 
-  /* 1 intro, 2 context, 3 role+contribution, 4 scope */
+  /* intro, context, role, scope */
   var intro = '<div class="prose"><p>' + esc(p.overview) + '</p></div>';
-  var context = p.context ? '<div class="prose"><p>' + esc(p.context) + '</p></div>'
-    : todo("context", "context", "Describe the business or product context.");
-  var role = "";
+  var context = p.context ? '<div class="prose"><p>' + esc(p.context) + '</p></div>' : todo("context", "Describe the business or product context.");
+  var role;
   if (p.role || p.contribution.length) {
     role = '<div class="prose">' + (p.role ? "<p>" + esc(p.role) + "</p>" : "") +
       (p.contribution.length ? "<ul>" + p.contribution.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul>" : "") + "</div>";
-  } else role = todo("role", "role", "State your specific role and what you actually contributed. Be precise about which pages or tasks were yours.");
-  var scope = p.scope.length ? list(p.scope) : todo("scope", "scope", "List the work areas you were involved in (for example, selected pages, theme customization, responsive fixes).");
+  } else role = todo("role", "State your specific role and what you actually contributed. Be precise about which pages or tasks were yours.");
+  var scope = p.scope.length ? list(p.scope) : todo("scope", "List the work areas you were involved in (for example, selected pages, theme customization, responsive fixes).");
 
-  /* 5 gallery */
-
-
-  /* Cover screenshot and responsive gallery */
-  var projectFolder = "assets/projects/" + p.slug + "/";
-
-  function screenshot(src, alt, className, loading) {
-    return '<img class="' + className + '"' +
-      ' src="' + esc(src) + '"' +
-      ' alt="' + esc(alt) + '"' +
-      ' loading="' + loading + '"' +
-      ' onerror="this.closest(\'figure\') ? this.closest(\'figure\').remove() : this.remove()">';
-  }
-
-  var coverSrc = (p.images && p.images.cover)
-    ? p.images.cover
-    : projectFolder + "desktop.jpg";
-
-  var cover =
-    '<img class="case-cover__image"' +
-    ' src="' + esc(coverSrc) + '"' +
-    ' alt="' + esc(p.name + " website screenshot") + '"' +
-    ' loading="eager"' +
-    ' onerror="this.onerror=null;this.src=\'' +
-    esc(projectFolder + "desktop.jpg") + '\'">';
-
-  var galleryItems = [
-    {
-      src: projectFolder + "desktop.jpg",
-      kind: "desktop",
-      caption: "Desktop website preview"
-    },
-    {
-      src: projectFolder + "mobile.jpg",
-      kind: "mobile",
-      caption: "Mobile website preview"
-    },
-    {
-      src: projectFolder + "fullpage.jpg",
-      kind: "fullpage",
-      caption: "Full-page website preview"
-    }
-  ];
-
-  var galleryHtml =
-    '<div class="gallery gallery--case-study">' +
-    galleryItems.map(function (item) {
-      return '<figure class="shot shot--' + item.kind + '">' +
-        '<div class="shot__frame">' +
-        screenshot(
-          item.src,
-          p.name + " — " + item.caption,
-          "shot__image",
-          "lazy"
-        ) +
-        '</div>' +
-        '<figcaption>' + esc(item.caption) + '</figcaption>' +
-        '</figure>';
-    }).join("") +
-    '</div>';
-
-
-
-  /* repos (GitHub) */
+  /* repositories (GitHub project only) */
   var reposHtml = "";
   if (p.extra && p.extra.type === "repos") {
     reposHtml = '<div class="repos">' + p.extra.repos.map(function (r) {
@@ -133,42 +62,64 @@
     }).join("") + '</div><p class="notice">Forks are listed for reference only and are not presented as my own code.</p>';
   }
 
-  /* 6 process, 7 challenges, 8 learnings */
+  /* gallery: desktop + mobile auto-load from assets/projects/<slug>/, then any extra images */
+  function shot(src, kind, label) {
+    var note = S.showPlaceholders ? "<small>Screenshot not added yet</small>" : "";
+    var drop = S.showPlaceholders ? "this.remove()" : "this.closest('figure').remove()";
+    return '<figure class="shot shot--' + kind + '"><div class="shot__frame">' +
+      '<div class="browser__fallback"><b>' + esc(label) + '</b>' + note + '</div>' +
+      '<img src="' + esc(src) + '" data-zoom="' + esc(src) + '" alt="' + esc(p.name + " " + label.toLowerCase()) + '" loading="lazy" onerror="' + drop + '"></div>' +
+      '<figcaption>' + esc(label) + ' of the live site</figcaption></figure>';
+  }
+  var extra = p.images.gallery || [];
+  var fullHtml = '<figure class="viewer"><div class="viewer__bar"><i></i><i></i><i></i><span>' + esc(UI.host(p.url || "")) + '</span><button type="button" data-zoom="' + esc(p.images.full) + '">Open full size ↗</button></div>' +
+    '<div class="viewer__scroll" tabindex="0" aria-label="Scrollable full-page screenshot of ' + esc(p.name) + '"><img src="' + esc(p.images.full) + '" alt="' + esc(p.name + " full page") + '" loading="lazy" onerror="this.closest(\'.viewer\').remove()"></div>' +
+    '<figcaption>Full-page capture. Scroll inside the frame to move through the page.</figcaption></figure>';
+  var galleryHtml = fullHtml + '<div class="gallery" style="margin-top:20px">' + shot(p.images.desktop, "desktop", "Desktop view") + shot(p.images.mobile, "mobile", "Mobile view") + "</div>";
+  if (extra.length) {
+    galleryHtml += '<div class="gallery" style="margin-top:16px">' + extra.map(function (s) {
+      return '<figure class="shot shot--' + (s.kind === "mobile" ? "mobile" : "desktop") + '"><div class="shot__frame"><img src="' + esc(s.src) + '" alt="' + esc(s.alt || p.name) + '" loading="lazy"></div>' +
+        (s.caption ? "<figcaption>" + esc(s.caption) + "</figcaption>" : "") + "</figure>";
+    }).join("") + "</div>";
+  }
+  if (S.showPlaceholders) {
+    galleryHtml += '<div style="height:16px"></div><div class="todo"><b>Add your own work here</b>Design explorations and implementation examples go in <code>images.gallery</code> for <code>' + esc(p.slug) + '</code>.' +
+      (p.extra && p.extra.type === "app" ? " For the app, add screenshots of the screens you worked on." : "") + "</div>";
+  }
+
+  /* process, challenges, learnings, live link */
   var process = p.process.length ? '<div class="prose steps">' + p.process.map(function (s) {
     return "<div><h3>" + esc(s.title) + "</h3><p>" + esc(s.text) + "</p></div>";
-  }).join("") + "</div>" : todo("process", "process", "Describe how you approached the design and development work, only what actually happened.");
+  }).join("") + "</div>" : todo("process", "Describe how you approached the design and development work, only what actually happened.");
   var challenges = p.challenges.length ? '<div class="prose">' + p.challenges.map(function (c) {
     return '<div class="cs-pair"><strong>Challenge</strong><p>' + esc(c.challenge) + '</p><div style="height:12px"></div><strong>Solution</strong><p>' + esc(c.solution) + "</p></div>";
-  }).join("") + "</div>" : todo("challenges", "challenges", "Only add challenges and solutions that really happened. Leave empty otherwise.");
-  var learnings = p.learnings.length ? list(p.learnings) : todo("learnings", "learnings", "Add what you learned.");
-
-  /* 9 link */
-  var live = p.url ? '<div class="prose"><p><a class="btn btn--primary" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.linkLabel) + ' <span class="arrow" aria-hidden="true">↗</span></a></p></div>' : "";
+  }).join("") + "</div>" : todo("challenges", "Only add challenges and solutions that really happened. Leave empty otherwise.");
+  var learnings = p.learnings.length ? list(p.learnings) : todo("learnings", "Add what you learned.");
+  var live = p.url ? '<div class="prose"><p><a class="btn btn--primary" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.linkLabel) + ' <span aria-hidden="true">↗</span></a></p></div>' : "";
 
   var facts = '<dl class="facts"><div><dt>Category</dt><dd>' + esc(LBL[p.category]) + '</dd></div>' +
     '<div><dt>Type</dt><dd>' + (p.isConcept ? "Concept project" : "Live project") + '</dd></div>' +
     '<div><dt>My role</dt><dd>' + (p.role ? esc(p.role) : (S.showPlaceholders ? "To be added" : "—")) + '</dd></div>' +
-    '<div><dt>Link</dt><dd>' + (p.url ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(new URL(p.url).hostname.replace(/^www\./, "")) + ' ↗</a>' : "") + '</dd></div></dl>';
-
+    (p.period ? '<div><dt>Period</dt><dd>' + esc(p.period) + '</dd></div>' : '') + '<div><dt>Link</dt><dd>' + (p.url ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(UI.host(p.url)) + ' ↗</a>' : "") + '</dd></div></dl>';
 
   root.innerHTML =
     '<div class="case-hero"><a class="crumb" href="index.html#work">← All projects</a>' +
-    '<span class="eyebrow">' + esc(LBL[p.category]) + (p.isConcept ? " · Concept project" : "") + '</span>' +
+    '<div class="label"><b>' + pad(idx + 1) + '</b> ' + esc(LBL[p.category]) + (p.isConcept ? " · Concept project" : "") + '</div>' +
     '<h1>' + esc(p.name) + '</h1><p class="case-hero__lead">' + esc(p.summary) + '</p>' + facts +
-    '<div class="case-cover"><div class="card__media">' + cover + '</div></div></div>' +
-    section("01", "Introduction", intro) +
-    section("02", "Business & product context", context) +
-    section("03", "My role", role) +
-    section("04", "Scope of work", scope) +
-    (reposHtml ? section("05", "Repositories", reposHtml) : "") +
-    section(reposHtml ? "06" : "05", "Screenshots & gallery", galleryHtml) +
-    section("06", "Design & development approach", process) +
-    (p.challenges.length || S.showPlaceholders ? section("07", "Challenges & solutions", challenges) : "") +
-    section("08", "Key learnings", learnings) +
-    section("09", "Live project", live) +
+    '<div class="case-stage">' + UI.stage(p, idx, "div", null) + '</div></div>' +
+    section("Introduction", intro) +
+    section("Business & product context", context) +
+    section("My role", role) +
+    section("Scope of work", scope) +
+    section("Repositories", reposHtml) +
+    section("Screenshots & gallery", galleryHtml) +
+    section("Design & development approach", process) +
+    (p.challenges.length || S.showPlaceholders ? section("Challenges & solutions", challenges) : "") +
+    section("Key learnings", learnings) +
+    section("Live project", live) +
     '<nav class="case-nav" aria-label="Project navigation">' +
-    '<a href="case-study.html?project=' + prev.slug + '"><small>← Previous</small><strong>' + esc(prev.name) + '</strong></a>' +
-    '<a href="case-study.html?project=' + next.slug + '"><small>Next →</small><strong>' + esc(next.name) + '</strong></a>' +
+      '<a href="case-study.html?project=' + prev.slug + '"><small>← Previous</small><strong>' + esc(prev.name) + '</strong></a>' +
+      '<a href="case-study.html?project=' + next.slug + '"><small>Next →</small><strong>' + esc(next.name) + '</strong></a>' +
     '</nav>' +
     '<p class="notice">Brand names, logos and screenshots on third-party sites belong to their respective owners. This page describes work I contributed to, not the ownership of the brand or site.</p>';
 })();

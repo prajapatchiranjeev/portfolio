@@ -10,12 +10,12 @@
 
 window.SITE = {
   name: "Chiranjeev Prajapat",
-  title: "Web Developer | UI/UX Designer | Frontend Developer",
+  title: "Front-End Developer | Shopify & WordPress Developer | UI/UX & Graphics Designer",
   resumePath: "assets/resume/Chiranjeev-Prajapat-Resume.pdf",
-  email: "",
+  email: "prajapatrahul05@gmail.com",
   github: "https://github.com/prajapatchiranjeev",
   linkedin: "https://www.linkedin.com/in/chiranjeev-cj/",
-  location: "Jaipur, India",
+  location: "Jaipur, Rajasthan",
   showPlaceholders: false
 };
 
@@ -29,49 +29,28 @@ window.CATEGORIES = [
 ];
 
 window.SKILLS = [
-  {
-    group: "Design",
-    items: [
-      "UI/UX Design",
-      "Web Design",
-      "Responsive Layouts",
-      "Visual Hierarchy",
-      "Design-to-Development Handoff"
-    ]
-  },
-  {
-    group: "Frontend Development",
-    items: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "React",
-      "Responsive Web Development",
-      "Flutter UI Development"
-    ]
-  },
-
-  {
-    group: "CMS & E-commerce",
-    items: [
-      "Shopify",
-      "Shopify Theme Customization",
-      "WordPress",
-      "Website Maintenance",
-      "E-commerce UI"
-    ]
-  },
-  {
-    group: "Marketing & Optimization",
-    items: [
-      "SEO",
-      "Technical SEO",
-      "Google Search Console",
-      "Google Analytics",
-      "Digital Marketing Creatives"
-    ]
-  }
+  { group: "Front-End", items: ["HTML5 & CSS3", "JavaScript (ES6+)", "React.js", "jQuery", "Bootstrap", "Tailwind CSS"] },
+  { group: "Shopify", items: ["Liquid Templating", "Dawn Theme", "Shopify CLI", "Online Store 2.0", "App Integration", "Metafields"] },
+  { group: "WordPress", items: ["Custom Themes", "WooCommerce", "Elementor", "ACF", "Plugin Integration", "Performance Optimisation"] },
+  { group: "UI/UX & Design", items: ["Figma", "Adobe Photoshop", "Canva", "Wireframing", "Prototyping", "Responsive Design"] },
+  { group: "SEO & Analytics", items: ["On-Page SEO", "Technical SEO", "Local SEO", "Core Web Vitals", "Google Analytics", "Search Console", "Semrush & Ahrefs"] },
+  { group: "Mobile, Backend & Tools", items: ["Flutter (Dart)", "PHP & MySQL", "REST API Integration", "Git & GitHub", "Cross-Browser Testing", "Linux"] }
 ];
+
+window.EXPERIENCE = [
+  { role: "Web Developer & Graphics Designer", org: "Exdells India Pvt. Ltd.", period: "Nov 2025 – Present", tags: "WordPress · Flutter · CRM · Canva · Photoshop", points: ["Designed and developed the official company website: responsive, SEO-structured and brand-aligned.", "Built a Solar CRM platform for customer leads, project pipelines, site surveys and quotation workflows.", "Built a cross-platform Flutter app for Android and iOS with REST API integration.", "Produced brand graphics, social media creatives and marketing collateral."] },
+  { role: "Web & Graphics Designer", org: "Payrupya", period: "Aug 2025 – Nov 2025", tags: "Canva · Photoshop · Figma · HTML/CSS · WordPress", points: ["Designed social media creatives, promotional banners and landing page layouts.", "Developed website UI mockups in Figma focused on visual hierarchy and user flows.", "Produced Instagram posts, Facebook ads and website sliders."] },
+  { role: "Web Developer & SEO Specialist", org: "HostnetIndia", period: "Apr 2025 – Aug 2025", tags: "WordPress · PHP · Google Analytics · Search Console · Semrush", points: ["Developed and maintained responsive WordPress sites with custom themes, Elementor and PHP across client projects.", "Executed on-page and technical SEO: keywords, schema markup, canonical tags and internal linking.", "Ran technical SEO audits and worked on Core Web Vitals through image compression, lazy loading and caching."] },
+  { role: "Shopify Developer & UI/UX Designer", org: "Fabritual", period: "Feb 2024 – Apr 2025", tags: "Shopify Liquid · Dawn · Shopify CLI · Figma · Canva", points: ["Built and customised Shopify storefronts with Liquid: custom sections, snippets and templates.", "Customised the Dawn theme and integrated third-party apps for reviews, upsells and email marketing.", "Built custom collection filters and product pages; turned Figma wireframes into responsive components."] },
+  { role: "Web Developer", org: "Experts Mind IT Educational Pvt Ltd", period: "Dec 2022 – Jan 2024", tags: "HTML · CSS · JavaScript · PHP · WordPress · Git", points: ["Built responsive, cross-browser websites with HTML, CSS, JavaScript, PHP and WordPress.", "Applied on-page SEO practices and used Git/GitHub within a team workflow."] },
+  { role: "Front-End Developer Intern", org: "eShiksa Technology Services Pvt. Ltd", period: "Aug 2018 – Jan 2019", tags: "HTML · CSS · JavaScript · Bootstrap · Git", points: ["Built responsive web interfaces and integrated REST APIs under senior developer guidance."] }
+];
+
+window.EDUCATION = {
+  degree: "B.Tech, Computer Science & Engineering (Minor: Information Technology & Programming)",
+  school: "Rajasthan Technical University, Kota · 2014 – 2018",
+  certs: ["Google Analytics Certification, Google", "Front-End Engineer Career Path, Codecademy", "Frontend Developer Career Path, Scrimba"]
+};
 
 /* Default values shared by every project. */
 function project(data) {
@@ -85,7 +64,9 @@ function project(data) {
     context: "",
     isConcept: false,
     images: {
-      cover: "",
+      desktop: "assets/projects/" + data.slug + "/desktop.jpg",
+      mobile: "assets/projects/" + data.slug + "/mobile.jpg",
+      full: "assets/projects/" + data.slug + "/fullpage.jpg",
       gallery: []
     },
     linkLabel: "Visit live site",
@@ -397,6 +378,7 @@ window.PROJECTS = [
 
   project({
     slug: "fabritual",
+    period: "Feb 2024 – Apr 2025",
     name: "Fabritual",
     category: "ecommerce",
     url: "https://fabritual.com/",
@@ -410,58 +392,47 @@ window.PROJECTS = [
     context:
       "A fabric e-commerce store with a broad catalogue and product variations.",
 
-    role: "Front-End UI/UX Designer",
+    role: "Shopify Developer & UI/UX Designer",
 
     contribution: [
-      "Worked on responsive web interfaces using front-end technologies.",
-      "Focused on mobile-first layouts and content presentation.",
-      "Created digital graphics and marketing visuals aligned with brand guidelines.",
-      "Reviewed visual consistency and interface usability."
+      "Developed and customised Shopify storefronts using Liquid, building custom sections, snippets and templates per client requirements.",
+      "Customised the Dawn theme: layout, typography, colour schemes and product pages.",
+      "Integrated third-party apps for reviews, upsells and email marketing.",
+      "Built custom collection filters, product pages and checkout-related experiences.",
+      "Translated Figma wireframes into responsive front-end components and produced brand graphics and campaign creatives."
     ],
 
     scope: [
-      "Front-end UI development",
-      "Responsive HTML and CSS layouts",
-      "JavaScript interface interactions",
-      "Mobile-first design",
-      "Brand graphics and marketing visuals"
+      "Shopify Liquid development",
+      "Dawn theme customisation",
+      "Product and collection page UI",
+      "Third-party app integration",
+      "Figma to front-end implementation",
+      "Brand graphics and campaign creatives"
     ],
 
     process: [
-      {
-        title: "Interface planning",
-        text: "Reviewed page structure, visual hierarchy, content requirements and available brand guidelines."
-      },
-      {
-        title: "Front-end implementation",
-        text: "Worked on web interface structure and layout refinements using relevant front-end technologies."
-      },
-      {
-        title: "Responsive refinement",
-        text: "Focused on spacing, typography, content flow and consistent presentation across screen sizes."
-      }
+      { title: "Planning", text: "Reviewed client requirements, Figma wireframes and the existing storefront structure." },
+      { title: "Theme development", text: "Built custom Liquid sections, snippets and templates on top of the Dawn theme." },
+      { title: "Integration and refinement", text: "Integrated third-party apps and refined responsive layouts, typography and product pages." }
     ],
 
     challenges: [
       {
-        challenge:
-          "Maintaining a consistent visual experience across different viewport sizes.",
-        solution:
-          "Focused on responsive layout structure, spacing and content flow."
+        challenge: "Presenting a broad fabric catalogue with many variations in a way that is easy to browse.",
+        solution: "Worked on custom collection filters and product page layouts for clearer browsing."
       },
       {
-        challenge:
-          "Keeping website visuals and marketing creatives aligned with the brand.",
-        solution:
-          "Maintained consistency in typography, imagery and visual presentation."
+        challenge: "Keeping storefront design consistent across client requirements and screen sizes.",
+        solution: "Used reusable Liquid sections and consistent typography and colour treatment."
       }
     ],
 
     learnings: [
-      "Building and refining responsive interfaces.",
-      "Applying mobile-first principles to front-end work.",
-      "Maintaining brand consistency across digital assets.",
-      "Balancing visual design with usability."
+      "Shopify theme development with Liquid, Dawn and Shopify CLI.",
+      "Turning Figma designs into reusable theme sections.",
+      "Choosing and integrating third-party Shopify apps.",
+      "Designing product and collection pages around browsing and variants."
     ]
   }),
 
@@ -545,6 +516,7 @@ window.PROJECTS = [
 
   project({
     slug: "hostnet-india",
+    period: "Apr 2025 – Aug 2025",
     name: "Hostnet India",
     category: "business",
     url: "https://hostnetindia.com/",
@@ -558,13 +530,13 @@ window.PROJECTS = [
     context:
       "A hosting company website where service discovery, plan information and technical content need clear presentation.",
 
-    role: "Sr. Web Developer & SEO Specialist",
+    role: "Web Developer & SEO Specialist",
 
     contribution: [
-      "Developed and maintained responsive WordPress websites.",
-      "Worked with custom PHP and front-end technologies on website refinements.",
-      "Focused on page speed, cross-device compatibility and technical SEO.",
-      "Used Google Analytics and Search Console to review website performance."
+      "Developed and maintained responsive WordPress websites using custom themes, Elementor and PHP across multiple client projects.",
+      "Carried out on-page and technical SEO: keyword optimisation, schema markup, canonical tags and internal linking.",
+      "Ran technical SEO audits covering broken links, duplicate content, page speed and mobile usability.",
+      "Worked on Core Web Vitals (LCP, CLS, FID) through image compression, lazy loading and caching."
     ],
 
     scope: [
@@ -694,6 +666,7 @@ window.PROJECTS = [
 
   project({
     slug: "payrupya",
+    period: "Aug 2025 – Nov 2025",
     name: "PayRupya",
     category: "business",
     url: "https://payrupya.in/",
@@ -710,10 +683,9 @@ window.PROJECTS = [
     role: "Web & Graphics Designer",
 
     contribution: [
-      "Created social media creatives, banners and website promotional visuals.",
-      "Worked on website UI mockups with attention to layout and usability.",
-      "Designed marketing visuals for digital campaigns.",
-      "Focused on visual hierarchy and consistent brand presentation."
+      "Designed social media creatives, promotional banners and landing page layouts.",
+      "Developed website UI mockups in Figma with focus on visual hierarchy, colour harmony and user flows.",
+      "Produced marketing assets: Instagram posts, Facebook ads and website sliders."
     ],
 
     scope: [
@@ -769,6 +741,7 @@ window.PROJECTS = [
 
   project({
     slug: "exdells",
+    period: "Nov 2025 – Present",
     name: "Exdells",
     category: "solar",
     url: "https://www.exdells.com/",
@@ -785,11 +758,10 @@ window.PROJECTS = [
     role: "Web Developer & Graphics Designer",
 
     contribution: [
-      "Worked on the company website and responsive user interface.",
-      "Contributed to a Solar CRM platform for customer management and lead tracking.",
-      "Worked on a Flutter mobile application.",
-      "Created marketing creatives, brand graphics and social media visuals.",
-      "Aligned digital interfaces with business and user requirements."
+      "Designed and developed the company website: responsive, SEO-structured and aligned with the brand.",
+      "Built a Solar CRM platform for customer leads, project pipelines, site surveys and quotation workflows.",
+      "Built a cross-platform Flutter app for Android and iOS with REST API integration.",
+      "Produced brand graphics, social media creatives and marketing material."
     ],
 
     scope: [

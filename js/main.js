@@ -33,66 +33,81 @@
   window.addEventListener("scroll", function () { nav.classList.toggle("is-scrolled", window.scrollY > 8); }, { passive: true });
 
   /* ---- project grid ---- */
-
-  /* ---- project grid ---- */
   var grid = document.getElementById("grid"), filters = document.getElementById("filters");
 
-  function placeholder(p, i) {
-    var coverPath = "assets/projects/" + p.slug + "/desktop.jpg";
-
-    return '<img class="project-cover" src="' + esc(coverPath) +
-      '" alt="' + esc(p.name) + ' website screenshot" loading="lazy" ' +
-      'onerror="this.outerHTML=\'<div class=&quot;ph&quot;><span class=&quot;ph__idx&quot;>' +
-      pad(i + 1) + ' / ' + pad(P.length) +
-      '</span><span class=&quot;ph__name&quot;>' + esc(p.name) +
-      '</span><span class=&quot;ph__note&quot;>Screenshot unavailable</span></div>\'">';
-
-  }
-
   grid.innerHTML = P.map(function (p, i) {
-    var cover = p.images && p.images.cover
-      ? '<img class="project-cover" src="' + esc(p.images.cover) +
-      '" alt="' + esc(p.name) + ' screenshot" loading="lazy">'
-      : placeholder(p, i);
-
-    var wide = "";
-    var ext = p.url
-      ? '<a class="link" href="' + esc(p.url) +
-      '" target="_blank" rel="noopener">' + esc(p.linkLabel) + ' ↗</a>'
-      : "";
-
-    return '<article class="card reveal' + wide + '" data-cat="' + esc(p.category) + '">' +
-      '<a class="card__media" tabindex="-1" aria-hidden="true" href="case-study.html?project=' +
-      encodeURIComponent(p.slug) + '">' + cover + '</a>' +
+    var href = "case-study.html?project=" + p.slug;
+    var ext = p.url ? '<a class="link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.linkLabel) + ' ↗</a>' : "";
+    return '<article class="card reveal" data-cat="' + p.category + '">' +
+      window.UI.stage(p, i, "a", href) +
       '<div class="card__body">' +
-      '<div class="card__meta"><span>' + esc(LBL[p.category]) +
-      '</span><span>' + pad(i + 1) + '</span></div>' +
-      '<h3 class="card__title"><a href="case-study.html?project=' +
-      encodeURIComponent(p.slug) + '">' + esc(p.name) + '</a></h3>' +
-      '<p class="card__desc">' + esc(p.summary) +
-      (p.isConcept ? ' <span class="badge">Concept</span>' : '') + '</p>' +
-      '<div class="card__actions"><a class="btn btn--small" href="case-study.html?project=' +
-      encodeURIComponent(p.slug) + '">View Project <span class="arrow" aria-hidden="true">↗</span></a>' +
-      ext + '</div></div></article>';
+        '<div class="card__meta"><span>' + esc(LBL[p.category]) + '</span><span>' + pad(i + 1) + '</span></div>' +
+        '<h3 class="card__title"><a href="' + href + '">' + esc(p.name) + '</a></h3>' +
+        '<p class="card__desc">' + esc(p.summary) + (p.isConcept ? ' <span class="badge">Concept</span>' : '') + '</p>' +
+        '<div class="card__actions"><a class="btn btn--small" href="' + href + '">View Project <span aria-hidden="true">↗</span></a>' + ext + '</div>' +
+      '</div></article>';
   }).join("");
 
+  filters.innerHTML = CATS.map(function (c) {
+    var n = c.key === "all" ? P.length : P.filter(function (p) { return p.category === c.key; }).length;
+    return '<button type="button" class="chip" data-filter="' + c.key + '" aria-pressed="' + (c.key === "all") + '">' + esc(c.label) + '<small>' + n + '</small></button>';
+  }).join("");
+
+  function applyFilter(key) {
+    grid.classList.toggle("is-all", key === "all");
+    grid.querySelectorAll(".card").forEach(function (card) {
+      var show = key === "all" || card.getAttribute("data-cat") === key;
+      card.hidden = !show;
+      if (show) card.classList.add("is-in");
+    });
+    filters.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-filter") === key)); });
+  }
+  applyFilter("all");
+  filters.addEventListener("click", function (e) {
+    var b = e.target.closest(".chip"); if (b) applyFilter(b.getAttribute("data-filter"));
+  });
 
   /* ---- skills ---- */
   document.getElementById("skillsGrid").innerHTML = window.SKILLS.map(function (g) {
     return "<div><h3>" + esc(g.group) + "</h3><ul>" + g.items.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul></div>";
   }).join("");
 
+  /* ---- experience ---- */
+  var tl = document.getElementById("timeline");
+  if (tl) {
+    tl.innerHTML = window.EXPERIENCE.map(function (x) {
+      return '<li class="tl reveal"><div class="tl__when">' + esc(x.period) + '</div><div><h3>' + esc(x.role) + '</h3><p class="tl__org">' + esc(x.org) + '</p>' + (x.tags ? '<p class="tl__tags">' + esc(x.tags) + '</p>' : '') + '<ul>' +
+        x.points.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ul></div></li>';
+    }).join("");
+    var E = window.EDUCATION;
+    document.getElementById("edu").innerHTML = '<div><h3>Education</h3><p>' + esc(E.degree) + '<br><span>' + esc(E.school) + '</span></p></div>' +
+      '<div><h3>Certifications</h3><ul>' + E.certs.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + '</ul></div>';
+  }
+
   /* ---- contact ---- */
   var row = document.getElementById("contactRow"), note = document.getElementById("contactNote"), html = "";
-  if (S.email) html += '<a class="btn btn--primary" href="mailto:' + esc(S.email) + '">' + esc(S.email) + ' <span class="arrow" aria-hidden="true">↗</span></a>';
-  if (S.linkedin) html += '<a class="btn' + (S.email ? "" : " btn--primary") + '" href="' + esc(S.linkedin) + '" target="_blank" rel="noopener">LinkedIn ↗</a>';
-  html += '<a class="btn" href="' + esc(S.github) + '" target="_blank" rel="noopener">GitHub ↗</a>';
+  if (S.email) html += '<a class="btn btn--white" href="mailto:' + esc(S.email) + '">' + esc(S.email) + ' <span class="arrow" aria-hidden="true">↗</span></a>';
+  if (S.linkedin) html += '<a class="btn ' + (S.email ? "btn--light" : "btn--white") + '" href="' + esc(S.linkedin) + '" target="_blank" rel="noopener">LinkedIn ↗</a>';
+  html += '<a class="btn btn--light" href="' + esc(S.github) + '" target="_blank" rel="noopener">GitHub ↗</a>';
   row.innerHTML = html;
-  note.textContent = S.email ? "Based in " + S.location + ". Open to UI/UX, web design, Shopify and frontend roles."
-    : "Based in " + S.location + ". Open to UI/UX, web design, Shopify and frontend roles. (Add your email in js/projects-data.js to show an email button here.)";
+  note.textContent = S.email ? "Based in " + S.location + ". Open to front-end, Shopify, WordPress and UI/UX roles."
+    : "Based in " + S.location + ". Open to front-end, Shopify, WordPress and UI/UX roles. (Add your email in js/projects-data.js to show an email button here.)";
+
+  /* ---- ticker + cursor label ---- */
+  var words = ["Web design", "Frontend development", "E-commerce", "Shopify", "WordPress", "Responsive interfaces", "Mobile apps", "UI/UX"];
+  var tt = document.getElementById("tickerTrack");
+  if (tt) tt.innerHTML = words.concat(words).concat(words).concat(words).map(function (w) { return "<span>" + w + "</span>"; }).join("");
+  if (window.matchMedia("(hover: hover)").matches) {
+    var cur = document.createElement("div"); cur.className = "cursor"; cur.textContent = "View case study ↗"; document.body.appendChild(cur);
+    grid.addEventListener("mousemove", function (e) {
+      var on = e.target.closest(".card"); cur.classList.toggle("is-on", !!on);
+      cur.style.left = e.clientX + "px"; cur.style.top = e.clientY + "px";
+    });
+    grid.addEventListener("mouseleave", function () { cur.classList.remove("is-on"); });
+  }
 
   /* ---- active nav link ---- */
-  var secs = ["home", "work", "about", "skills", "contact"].map(function (id) { return document.getElementById(id); });
+  var secs = ["home", "work", "about", "experience", "skills", "contact"].map(function (id) { return document.getElementById(id); });
   if ("IntersectionObserver" in window) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
